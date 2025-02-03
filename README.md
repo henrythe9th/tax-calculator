@@ -2,8 +2,6 @@
 
 An interactive calculator that compares the tax implications of W2 employment versus S-Corp contractor status.
 
-![Calculator Preview](images/calculator-preview.svg)
-
 ## Features
 
 - All 50 states tax brackets and fees (2024 rates)
@@ -28,12 +26,7 @@ Input your:
 
 The calculator will show a side-by-side comparison of W2 vs S-Corp scenarios, including all taxes, deductions, and the final net income difference.
 
-## State-Specific Features
-
-- Accurate state income tax brackets for all 50 states
-- State-specific S-Corp fees (LLC fees, franchise tax, annual reports)
-- Automatic fee updates when switching states
-- Special handling for states with no income tax
+![image](https://github.com/user-attachments/assets/5dd3ee7f-19a1-4db0-9686-8bbafaa7a58a)
 
 ## Tax Calculations Include
 
