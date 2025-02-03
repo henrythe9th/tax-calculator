@@ -248,9 +248,88 @@ const TAX_RATES = {
         ],
         WY: [] // No state income tax
     },
-    STANDARD_DEDUCTION: 14600, // 2024 single filer
+    FEDERAL_STANDARD_DEDUCTION: 14600, // 2024 single filer
+    STATE_STANDARD_DEDUCTION: {
+        AL: 3000,
+        AK: 0, // No state income tax
+        AZ: 12950,
+        AR: 2200,
+        CA: 5202,
+        CO: 12950,
+        CT: 0, // No standard deduction
+        DE: 3250,
+        FL: 0, // No state income tax
+        GA: 4600,
+        HI: 2200,
+        ID: 12950,
+        IL: 0, // No standard deduction
+        IN: 0, // No standard deduction
+        IA: 2210,
+        KS: 3500,
+        KY: 2770,
+        LA: 4500,
+        ME: 12950,
+        MD: 2300,
+        MA: 0, // No standard deduction
+        MI: 0, // No standard deduction
+        MN: 12900,
+        MS: 2300,
+        MO: 12950,
+        MT: 4830,
+        NE: 7350,
+        NV: 0, // No state income tax
+        NH: 0, // Only taxes interest and dividends
+        NJ: 0, // No standard deduction
+        NM: 12950,
+        NY: 8000,
+        NC: 12950,
+        ND: 12950,
+        OH: 0, // No standard deduction
+        OK: 6350,
+        OR: 2420,
+        PA: 0, // No standard deduction
+        RI: 9300,
+        SC: 12950,
+        SD: 0, // No state income tax
+        TN: 0, // No state income tax
+        TX: 0, // No state income tax
+        UT: 0, // No standard deduction
+        VT: 6350,
+        VA: 4500,
+        WA: 0, // No state income tax
+        WV: 0, // No standard deduction
+        WI: 11790,
+        WY: 0 // No state income tax
+    },
     QBI_DEDUCTION: 0.20, // 20% of qualified business income
     MEALS_DEDUCTION: 0.50 // 50% of meal expenses are deductible
+};
+
+// S corporation specific state tax rules
+const SCORP_STATE_RULES = {
+    DC: { recognizeScorp: false }, // Treats as C corp
+    NH: { recognizeScorp: false }, // Treats as C corp
+    TN: { recognizeScorp: false }, // Treats as C corp
+    
+    // States that tax S corps on part of their income
+    MA: { profitTaxThreshold: 1000000, profitTaxRate: 0.02 }, // Tax on profits above threshold
+    IN: { capitalGainsRate: 0.0315, passiveIncomeRate: 0.0315 }, // Tax on capital gains and excess passive income
+    KY: { capitalGainsRate: 0.045, passiveIncomeRate: 0.045 }, // Tax on capital gains and excess passive income
+    ID: { capitalGainsRate: 0.058, passiveIncomeRate: 0.058 }, // Similar to IN/KY
+    ME: { capitalGainsRate: 0.0715, passiveIncomeRate: 0.0715 }, // Similar to IN/KY
+    WI: { capitalGainsRate: 0.0765, passiveIncomeRate: 0.0765 }, // Similar to IN/KY
+    
+    // States that double tax (both corp and shareholders)
+    MI: { 
+        corporateRate: 0.0425, // Single business tax
+        exemptionThreshold: 350000 // Exempt if gross receipts below this
+    },
+    CA: {
+        minimumTax: 800,
+        corporateRate: 0.015 // 1.5% of taxable income
+    },
+    NJ: { corporateRate: 0.0925 }, // Corporate tax rate on S corp income
+    NY: { corporateRate: 0.065 } // Corporate tax rate on S corp income
 };
 
 const STATE_FEES = {
@@ -314,7 +393,8 @@ function formatMoney(amount) {
     }).format(amount);
 }
 
-function calculateStateTax(taxableIncome, state) {
+// Calculate regular state income tax
+function calculateBaseStateTax(taxableIncome, state) {
     if (!TAX_RATES.STATE[state] || TAX_RATES.STATE[state].length === 0) {
         return 0; // No state income tax
     }
@@ -332,6 +412,69 @@ function calculateStateTax(taxableIncome, state) {
     }
 
     return tax;
+}
+
+// Calculate S corporation specific state tax including special rules
+function calculateSCorpStateTax(params) {
+    const {
+        state,
+        grossIncome,
+        stateTaxableIncome,
+        dividendAmount,
+        employerFica,
+        totalDeductionsWithFees
+    } = params;
+
+    let stateTax = 0;
+    const rules = SCORP_STATE_RULES[state];
+
+    if (rules) {
+        // States that don't recognize S corps - treat as C corp
+        if (rules.recognizeScorp === false) {
+            // For non-recognizing states, only allow standard C corp deductions
+            // Don't subtract S corp specific items like employerFica
+            const cCorpTaxableIncome = grossIncome - totalDeductionsWithFees;
+            return calculateBaseStateTax(cCorpTaxableIncome, state);
+        }
+
+        // Calculate base state tax on S corp income
+        stateTax = calculateBaseStateTax(stateTaxableIncome, state);
+
+        // States with profit threshold tax (e.g., Massachusetts)
+        if (rules.profitTaxThreshold) {
+            const taxableProfit = Math.max(grossIncome - totalDeductionsWithFees - employerFica - rules.profitTaxThreshold, 0);
+            stateTax += taxableProfit * rules.profitTaxRate;
+        }
+
+        // States that tax capital gains and passive income
+        if (rules.capitalGainsRate || rules.passiveIncomeRate) {
+            // Assume 15% of dividend income is from capital gains and passive income
+            const capitalGainsAndPassiveIncome = dividendAmount * 0.15;
+            stateTax += capitalGainsAndPassiveIncome * (rules.capitalGainsRate || 0);
+        }
+
+        // States with corporate level tax
+        if (rules.corporateRate) {
+            if (rules.exemptionThreshold) {
+                // Only apply corporate tax if above threshold (e.g., Michigan)
+                if (grossIncome > rules.exemptionThreshold) {
+                    stateTax += (grossIncome - totalDeductionsWithFees) * rules.corporateRate;
+                }
+            } else {
+                // Apply minimum tax if applicable (e.g., California)
+                if (rules.minimumTax) {
+                    stateTax += Math.max(rules.minimumTax, (grossIncome - totalDeductionsWithFees) * rules.corporateRate);
+                } else {
+                    stateTax += (grossIncome - totalDeductionsWithFees) * rules.corporateRate;
+                }
+            }
+        }
+    } else {
+        // For states without special S corp rules, just calculate normal state tax
+        stateTax = calculateBaseStateTax(stateTaxableIncome, state);
+    }
+
+    return stateTax;
 }
 
 function calculateFederalTax(taxableIncome) {
@@ -361,9 +504,10 @@ function calculateFICA(salary, isEmployer = false) {
 // Main calculation functions
 function calculateW2(baseWages, state) {
     const ficaTax = calculateFICA(baseWages);
-    const federalTaxableIncome = Math.max(baseWages - TAX_RATES.STANDARD_DEDUCTION - (ficaTax / 2), 0);
+    const federalTaxableIncome = Math.max(baseWages - TAX_RATES.FEDERAL_STANDARD_DEDUCTION - (ficaTax / 2), 0);
     const federalTax = calculateFederalTax(federalTaxableIncome);
-    const stateTax = calculateStateTax(Math.max(baseWages - TAX_RATES.STANDARD_DEDUCTION, 0), state);
+    const stateStandardDeduction = TAX_RATES.STATE_STANDARD_DEDUCTION[state] || 0;
+    const stateTax = calculateBaseStateTax(Math.max(baseWages - stateStandardDeduction, 0), state);
 
     return {
         grossIncome: baseWages,
@@ -416,17 +560,25 @@ function calculateSCorp(params) {
     
     // Calculate federal taxable income
     const federalTaxableIncome = Math.max((salaryAmount + dividendAmount) - 
-                         TAX_RATES.STANDARD_DEDUCTION -
+                         TAX_RATES.FEDERAL_STANDARD_DEDUCTION -
                          (totalDeductionsWithFees + employerFica + healthInsurance + qbiDeduction), 0);
     
     // Calculate state taxable income (some states may handle deductions differently)
+    const stateStandardDeduction = TAX_RATES.STATE_STANDARD_DEDUCTION[state] || 0;
     const stateTaxableIncome = Math.max((salaryAmount + dividendAmount) - 
-                         TAX_RATES.STANDARD_DEDUCTION -
+                         stateStandardDeduction -
                          (totalDeductionsWithFees + employerFica + healthInsurance), 0);
     
     // Calculate taxes
     const federalTax = calculateFederalTax(federalTaxableIncome) - rdCredit;
-    const stateTax = calculateStateTax(stateTaxableIncome, state);
+    const stateTax = calculateSCorpStateTax({
+        state,
+        grossIncome,
+        stateTaxableIncome,
+        dividendAmount,
+        employerFica,
+        totalDeductionsWithFees
+    });
     
     // Calculate net income (business deductions and fees are reimbursed)
     const netIncome = grossIncome - 
@@ -461,8 +613,8 @@ function updateW2Results(results) {
             <span class="result-value">${formatMoney(results.grossIncome)}</span>
         </div>
         <div class="result-row">
-            <span class="result-label">Standard Deduction:</span>
-            <span class="result-value">-${formatMoney(results.standardDeduction)}</span>
+            <span class="result-label">Federal Standard Deduction:</span>
+            <span class="result-value">-${formatMoney(TAX_RATES.FEDERAL_STANDARD_DEDUCTION)}</span>
         </div>
         <div class="result-row">
             <span class="result-label">FICA Tax:</span>
@@ -499,8 +651,8 @@ function updateSCorpResults(results) {
             <span class="result-value">${formatMoney(results.dividendAmount)}</span>
         </div>
         <div class="result-row">
-            <span class="result-label">Standard Deduction:</span>
-            <span class="result-value">-${formatMoney(TAX_RATES.STANDARD_DEDUCTION)}</span>
+            <span class="result-label">Federal Standard Deduction:</span>
+            <span class="result-value">-${formatMoney(TAX_RATES.FEDERAL_STANDARD_DEDUCTION)}</span>
         </div>
         <div class="result-row">
             <span class="result-label">Business Deductions:</span>
