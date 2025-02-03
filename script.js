@@ -248,7 +248,59 @@ const TAX_RATES = {
         ],
         WY: [] // No state income tax
     },
-    STANDARD_DEDUCTION: 14600, // 2024 single filer
+    FEDERAL_STANDARD_DEDUCTION: 14600, // 2024 single filer
+    STATE_STANDARD_DEDUCTION: {
+        AL: 3000,
+        AK: 0, // No state income tax
+        AZ: 13850,
+        AR: 2200,
+        CA: 5202,
+        CO: 13850,
+        CT: 0, // No standard deduction
+        DE: 3250,
+        FL: 0, // No state income tax
+        GA: 5400,
+        HI: 2200,
+        ID: 13850,
+        IL: 0, // No standard deduction
+        IN: 0, // No standard deduction
+        IA: 2210,
+        KS: 3500,
+        KY: 2990,
+        LA: 4500,
+        ME: 13850,
+        MD: 2400,
+        MA: 4400,
+        MI: 0, // No standard deduction
+        MN: 13825,
+        MS: 2300,
+        MO: 13850,
+        MT: 5440,
+        NE: 7900,
+        NV: 0, // No state income tax
+        NH: 0, // Only taxes interest and dividends
+        NJ: 0, // No standard deduction
+        NM: 13850,
+        NY: 8000,
+        NC: 14100,
+        ND: 13850,
+        OH: 0, // No standard deduction
+        OK: 6650,
+        OR: 2420,
+        PA: 0, // No standard deduction
+        RI: 9550,
+        SC: 13850,
+        SD: 0, // No state income tax
+        TN: 0, // No state income tax
+        TX: 0, // No state income tax
+        UT: 0, // No standard deduction
+        VT: 6500,
+        VA: 8500,
+        WA: 0, // No state income tax
+        WV: 0, // No standard deduction
+        WI: 12760,
+        WY: 0 // No state income tax
+    },
     QBI_DEDUCTION: 0.20, // 20% of qualified business income
     MEALS_DEDUCTION: 0.50 // 50% of meal expenses are deductible
 };
@@ -314,10 +366,14 @@ function formatMoney(amount) {
     }).format(amount);
 }
 
-function calculateStateTax(taxableIncome, state) {
+function calculateStateTax(income, state) {
     if (!TAX_RATES.STATE[state] || TAX_RATES.STATE[state].length === 0) {
         return 0; // No state income tax
     }
+
+    // Apply state standard deduction
+    const stateStandardDeduction = TAX_RATES.STATE_STANDARD_DEDUCTION[state] || 0;
+    const taxableIncome = Math.max(income - stateStandardDeduction, 0);
 
     let tax = 0;
     let previousBracket = 0;
@@ -361,13 +417,13 @@ function calculateFICA(salary, isEmployer = false) {
 // Main calculation functions
 function calculateW2(baseWages, state) {
     const ficaTax = calculateFICA(baseWages);
-    const federalTaxableIncome = Math.max(baseWages - TAX_RATES.STANDARD_DEDUCTION - (ficaTax / 2), 0);
+    const federalTaxableIncome = Math.max(baseWages - TAX_RATES.FEDERAL_STANDARD_DEDUCTION, 0);
     const federalTax = calculateFederalTax(federalTaxableIncome);
-    const stateTax = calculateStateTax(Math.max(baseWages - TAX_RATES.STANDARD_DEDUCTION, 0), state);
+    const stateTax = calculateStateTax(baseWages, state);
 
     return {
         grossIncome: baseWages,
-        standardDeduction: TAX_RATES.STANDARD_DEDUCTION,
+        standardDeduction: TAX_RATES.FEDERAL_STANDARD_DEDUCTION,
         ficaTax,
         federalTax,
         stateTax,
@@ -416,12 +472,11 @@ function calculateSCorp(params) {
     
     // Calculate federal taxable income
     const federalTaxableIncome = Math.max((salaryAmount + dividendAmount) - 
-                         TAX_RATES.STANDARD_DEDUCTION -
+                         TAX_RATES.FEDERAL_STANDARD_DEDUCTION -
                          (totalDeductionsWithFees + employerFica + healthInsurance + qbiDeduction), 0);
     
-    // Calculate state taxable income (some states may handle deductions differently)
+    // Calculate state taxable income (apply state standard deduction and business deductions)
     const stateTaxableIncome = Math.max((salaryAmount + dividendAmount) - 
-                         TAX_RATES.STANDARD_DEDUCTION -
                          (totalDeductionsWithFees + employerFica + healthInsurance), 0);
     
     // Calculate taxes
@@ -453,7 +508,7 @@ function calculateSCorp(params) {
 }
 
 // UI update functions
-function updateW2Results(results) {
+function updateW2Results(results, state) {
     const w2Results = document.getElementById('w2Results');
     w2Results.innerHTML = `
         <div class="result-row">
@@ -461,8 +516,12 @@ function updateW2Results(results) {
             <span class="result-value">${formatMoney(results.grossIncome)}</span>
         </div>
         <div class="result-row">
-            <span class="result-label">Standard Deduction:</span>
-            <span class="result-value">-${formatMoney(results.standardDeduction)}</span>
+            <span class="result-label">Federal Standard Deduction:</span>
+            <span class="result-value">-${formatMoney(TAX_RATES.FEDERAL_STANDARD_DEDUCTION)}</span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">State Standard Deduction:</span>
+            <span class="result-value">-${formatMoney(TAX_RATES.STATE_STANDARD_DEDUCTION[state] || 0)}</span>
         </div>
         <div class="result-row">
             <span class="result-label">FICA Tax:</span>
@@ -483,7 +542,7 @@ function updateW2Results(results) {
     `;
 }
 
-function updateSCorpResults(results) {
+function updateSCorpResults(results, state) {
     const sCorpResults = document.getElementById('sCorpResults');
     sCorpResults.innerHTML = `
         <div class="result-row">
@@ -499,8 +558,12 @@ function updateSCorpResults(results) {
             <span class="result-value">${formatMoney(results.dividendAmount)}</span>
         </div>
         <div class="result-row">
-            <span class="result-label">Standard Deduction:</span>
-            <span class="result-value">-${formatMoney(TAX_RATES.STANDARD_DEDUCTION)}</span>
+            <span class="result-label">Federal Standard Deduction:</span>
+            <span class="result-value">-${formatMoney(TAX_RATES.FEDERAL_STANDARD_DEDUCTION)}</span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">State Standard Deduction:</span>
+            <span class="result-value">-${formatMoney(TAX_RATES.STATE_STANDARD_DEDUCTION[state] || 0)}</span>
         </div>
         <div class="result-row">
             <span class="result-label">Business Deductions:</span>
@@ -627,8 +690,8 @@ function updateCalculations() {
         stateFees
     });
 
-    updateW2Results(w2Results);
-    updateSCorpResults(sCorpResults);
+    updateW2Results(w2Results, state);
+    updateSCorpResults(sCorpResults, state);
     updateNetDifference(w2Results, sCorpResults);
 }
 
