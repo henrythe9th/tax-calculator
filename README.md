@@ -38,12 +38,6 @@ The calculator will show a side-by-side comparison of W2 vs S-Corp scenarios, in
 - QBI deduction (20% of qualified business income)
 - R&D tax credits (6.5% of qualifying expenses)
 
-### State
-- State-specific income tax brackets
-- Annual LLC/corporation fees
-- Franchise taxes where applicable
-- Annual report fees
-
 ### Business Deductions
 - Travel expenses
 - Commuting costs
@@ -52,3 +46,26 @@ The calculator will show a side-by-side comparison of W2 vs S-Corp scenarios, in
 - Cell phone expenses
 - Augusta rule (14-day home rental)
 - Health insurance premiums
+
+### State
+- State-specific income tax brackets
+- Annual LLC/corporation fees
+- Franchise taxes where applicable
+- Annual report fees
+
+#### Special S-Corp State Tax Rules
+- Non-Recognition States (treated as C-Corps)
+  * DC, NH, TN
+- Profit Threshold Tax
+  * MA: 2% tax on profits above $1M
+- Capital Gains & Passive Income Tax
+  * IN: 3.15% on capital gains and passive income
+  * KY: 4.5% on capital gains and passive income
+  * ID: 5.8% on capital gains and passive income
+  * ME: 7.15% on capital gains and passive income
+  * WI: 7.65% on capital gains and passive income
+- Double Taxation States
+  * MI: 4.25% corporate tax (exempt if gross receipts under $350K)
+  * CA: $800 minimum tax + 1.5% of taxable income
+  * NJ: 9.25% corporate tax
+  * NY: 6.5% corporate tax
