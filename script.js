@@ -467,8 +467,8 @@ function calculateSCorp(params) {
     const ficaTax = calculateFICA(salaryAmount);
     const employerFica = calculateFICA(salaryAmount, true);
     
-    // Calculate QBI deduction after business deductions
-    const qbiDeduction = (dividendAmount - employerFica - totalDeductionsWithFees) * TAX_RATES.QBI_DEDUCTION;
+    // Calculate QBI deduction after business deductions (ensure it's not negative)
+    const qbiDeduction = Math.max(dividendAmount - employerFica - totalDeductionsWithFees, 0) * TAX_RATES.QBI_DEDUCTION;
     
     // Calculate federal taxable income
     const federalTaxableIncome = Math.max((salaryAmount + dividendAmount) - 
@@ -486,6 +486,7 @@ function calculateSCorp(params) {
     // Calculate net income (business deductions and fees are reimbursed)
     const netIncome = grossIncome - 
                      ficaTax - 
+                     employerFica -
                      federalTax - 
                      stateTax - 
                      healthInsurance -
