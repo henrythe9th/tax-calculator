@@ -1,6 +1,8 @@
 # W2 vs S-Corp Tax Calculator
 
-An interactive calculator that compares the tax implications of W2 employment versus being your own buss with S-Corp status.
+An interactive calculator that compares the tax implications of W2 employment versus S-Corp contractor status.
+
+![Calculator Preview](images/calculator-preview.svg)
 
 ## Features
 
@@ -28,7 +30,32 @@ The calculator will show a side-by-side comparison of W2 vs S-Corp scenarios, in
 
 ## State-Specific Features
 
-- State income tax brackets for all 50 states
+- Accurate state income tax brackets for all 50 states
 - State-specific S-Corp fees (LLC fees, franchise tax, annual reports)
 - Automatic fee updates when switching states
 - Special handling for states with no income tax
+
+## Tax Calculations Include
+
+### Federal
+- 2024 tax brackets
+- Standard deduction ($14,600 for single filer)
+- FICA taxes (Social Security up to $168,600)
+- Medicare taxes (including Additional Medicare Tax)
+- QBI deduction (20% of qualified business income)
+- R&D tax credits (6.5% of qualifying expenses)
+
+### State
+- State-specific income tax brackets
+- Annual LLC/corporation fees
+- Franchise taxes where applicable
+- Annual report fees
+
+### Business Deductions
+- Travel expenses
+- Commuting costs
+- Home office deduction
+- Meals (50% deductible)
+- Cell phone expenses
+- Augusta rule (14-day home rental)
+- Health insurance premiums

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="900" height="600" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .title { font-size: 24px; font-weight: bold; }
+    .label { font-size: 14px; }
+    .value { font-size: 14px; font-weight: 500; }
+    .blue { color: #3b82f6; }
+    .green { color: #059669; }
+  </style>
+  <rect width="100%" height="100%" fill="#f9fafb"/>
+  <g transform="translate(50, 50)">
+    <text x="350" y="0" class="text title" text-anchor="middle">W2 vs S-Corp Tax Calculator</text>
+    
+    <!-- Left Panel -->
+    <g transform="translate(0, 50)">
+      <rect width="350" height="450" rx="8" fill="white" stroke="#e5e7eb"/>
+      <text x="20" y="30" class="text label">Input Parameters</text>
+      
+      <!-- Input Fields -->
+      <g transform="translate(20, 60)">
+        <text class="text label">Annual Wages/Earnings</text>
+        <rect x="0" y="10" width="310" height="35" rx="6" fill="white" stroke="#d1d5db"/>
+        <text x="10" y="32" class="text value">100,000</text>
+      </g>
+      
+      <!-- Sliders -->
+      <g transform="translate(20, 120)">
+        <text class="text label">Contractor Pay Premium (%)</text>
+        <rect x="0" y="10" width="310" height="4" rx="2" fill="#e2e8f0"/>
+        <circle cx="0" cy="12" r="8" fill="#3b82f6"/>
+        <text x="320" y="16" class="text label">0%</text>
+      </g>
+    </g>
+    
+    <!-- Right Panel -->
+    <g transform="translate(400, 50)">
+      <rect width="400" height="450" rx="8" fill="white" stroke="#e5e7eb"/>
+      <text x="20" y="30" class="text label">Comparison Results</text>
+      
+      <!-- Results Grid -->
+      <g transform="translate(20, 60)">
+        <text class="text label blue">W2 Employee</text>
+        <text x="200" y="0" class="text label green">S-Corp Contractor</text>
+        
+        <!-- Result Rows -->
+        <g transform="translate(0, 30)">
+          <text class="text label">Gross Income:</text>
+          <text x="180" y="0" class="text value">$100,000.00</text>
+          <text x="360" y="0" class="text value">$100,000.00</text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
