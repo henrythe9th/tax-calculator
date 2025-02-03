@@ -626,7 +626,6 @@ function initializeEventListeners() {
         'rdPercentage',
         'healthInsurance',
         'deductionTravel',
-        'deductionCommute',
         'deductionHomeOffice',
         'deductionMeals',
         'deductionPhone',
@@ -671,7 +670,6 @@ function updateCalculations() {
 
     const deductions = {
         travel: parseFloat(document.getElementById('deductionTravel').value) || 0,
-        commute: parseFloat(document.getElementById('deductionCommute').value) || 0,
         homeOffice: parseFloat(document.getElementById('deductionHomeOffice').value) || 0,
         meals: parseFloat(document.getElementById('deductionMeals').value) || 0,
         phone: parseFloat(document.getElementById('deductionPhone').value) || 0,
