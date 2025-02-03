@@ -26,7 +26,7 @@ Input your:
 
 The calculator will show a side-by-side comparison of W2 vs S-Corp scenarios, including all taxes, deductions, and the final net income difference.
 
-![image](https://github.com/user-attachments/assets/5dd3ee7f-19a1-4db0-9686-8bbafaa7a58a)
+![image](https://github.com/user-attachments/assets/f6651e0a-d791-4759-b9fa-358c4cc81b6c)
 
 ## Tax Calculations Include
 
