@@ -15,9 +15,295 @@ const TAX_RATES = {
         { bracket: 609350, rate: 0.35 },
         { bracket: Infinity, rate: 0.37 }
     ],
+    STATE: {
+        AL: [{ bracket: Infinity, rate: 0.05 }], // Flat 5%
+        AK: [], // No state income tax
+        AZ: [{ bracket: Infinity, rate: 0.025 }], // Flat 2.5%
+        AR: [
+            { bracket: 4300, rate: 0.02 },
+            { bracket: 8500, rate: 0.04 },
+            { bracket: Infinity, rate: 0.055 }
+        ],
+        CA: [
+            { bracket: 10099, rate: 0.01 },
+            { bracket: 23942, rate: 0.02 },
+            { bracket: 37788, rate: 0.04 },
+            { bracket: 52455, rate: 0.06 },
+            { bracket: 66295, rate: 0.08 },
+            { bracket: 338639, rate: 0.093 },
+            { bracket: 406364, rate: 0.103 },
+            { bracket: 677275, rate: 0.113 },
+            { bracket: Infinity, rate: 0.123 }
+        ],
+        CO: [{ bracket: Infinity, rate: 0.0444 }], // Flat 4.44%
+        CT: [
+            { bracket: 10000, rate: 0.03 },
+            { bracket: 50000, rate: 0.05 },
+            { bracket: 100000, rate: 0.055 },
+            { bracket: Infinity, rate: 0.0699 }
+        ],
+        DE: [
+            { bracket: 5000, rate: 0.022 },
+            { bracket: 10000, rate: 0.039 },
+            { bracket: 20000, rate: 0.048 },
+            { bracket: 25000, rate: 0.052 },
+            { bracket: 60000, rate: 0.0655 }
+        ],
+        FL: [], // No state income tax
+        GA: [
+            { bracket: 750, rate: 0.01 },
+            { bracket: 2250, rate: 0.02 },
+            { bracket: 3750, rate: 0.03 },
+            { bracket: 5250, rate: 0.04 },
+            { bracket: 7000, rate: 0.05 },
+            { bracket: Infinity, rate: 0.0575 }
+        ],
+        HI: [
+            { bracket: 2400, rate: 0.014 },
+            { bracket: 4800, rate: 0.032 },
+            { bracket: 9600, rate: 0.055 },
+            { bracket: 14400, rate: 0.064 },
+            { bracket: 19200, rate: 0.068 },
+            { bracket: 24000, rate: 0.072 },
+            { bracket: 36000, rate: 0.076 },
+            { bracket: 48000, rate: 0.079 },
+            { bracket: 150000, rate: 0.0825 },
+            { bracket: 175000, rate: 0.09 },
+            { bracket: 200000, rate: 0.10 },
+            { bracket: Infinity, rate: 0.11 }
+        ],
+        ID: [{ bracket: Infinity, rate: 0.058 }], // Flat 5.8%
+        IL: [{ bracket: Infinity, rate: 0.0495 }], // Flat 4.95%
+        IN: [{ bracket: Infinity, rate: 0.0315 }], // Flat 3.15%
+        IA: [
+            { bracket: 6000, rate: 0.044 },
+            { bracket: 30000, rate: 0.0482 },
+            { bracket: 75000, rate: 0.0598 },
+            { bracket: Infinity, rate: 0.0600 }
+        ],
+        KS: [
+            { bracket: 15000, rate: 0.031 },
+            { bracket: 30000, rate: 0.0525 },
+            { bracket: Infinity, rate: 0.057 }
+        ],
+        KY: [{ bracket: Infinity, rate: 0.045 }], // Flat 4.5%
+        LA: [
+            { bracket: 12500, rate: 0.0185 },
+            { bracket: 50000, rate: 0.035 },
+            { bracket: Infinity, rate: 0.0425 }
+        ],
+        ME: [
+            { bracket: 24500, rate: 0.058 },
+            { bracket: 58050, rate: 0.0675 },
+            { bracket: Infinity, rate: 0.0715 }
+        ],
+        MD: [
+            { bracket: 1000, rate: 0.02 },
+            { bracket: 2000, rate: 0.03 },
+            { bracket: 3000, rate: 0.04 },
+            { bracket: 100000, rate: 0.0475 },
+            { bracket: 125000, rate: 0.05 },
+            { bracket: 150000, rate: 0.0525 },
+            { bracket: 250000, rate: 0.055 },
+            { bracket: Infinity, rate: 0.0575 }
+        ],
+        MA: [{ bracket: Infinity, rate: 0.05 }], // Flat 5%
+        MI: [{ bracket: Infinity, rate: 0.0425 }], // Flat 4.25%
+        MN: [
+            { bracket: 30070, rate: 0.0535 },
+            { bracket: 98760, rate: 0.068 },
+            { bracket: 183340, rate: 0.0785 },
+            { bracket: Infinity, rate: 0.0985 }
+        ],
+        MS: [
+            { bracket: 5000, rate: 0.04 },
+            { bracket: 10000, rate: 0.05 },
+            { bracket: Infinity, rate: 0.05 }
+        ],
+        MO: [
+            { bracket: 1121, rate: 0.015 },
+            { bracket: 2242, rate: 0.02 },
+            { bracket: 3363, rate: 0.025 },
+            { bracket: 4484, rate: 0.03 },
+            { bracket: 5605, rate: 0.035 },
+            { bracket: 6726, rate: 0.04 },
+            { bracket: 7847, rate: 0.045 },
+            { bracket: 8968, rate: 0.05 },
+            { bracket: Infinity, rate: 0.0495 }
+        ],
+        MT: [
+            { bracket: 3600, rate: 0.01 },
+            { bracket: 5800, rate: 0.02 },
+            { bracket: 8900, rate: 0.03 },
+            { bracket: 12100, rate: 0.04 },
+            { bracket: 15400, rate: 0.05 },
+            { bracket: 19800, rate: 0.06 },
+            { bracket: Infinity, rate: 0.0675 }
+        ],
+        NE: [
+            { bracket: 3700, rate: 0.0246 },
+            { bracket: 22170, rate: 0.0351 },
+            { bracket: 35730, rate: 0.0501 },
+            { bracket: Infinity, rate: 0.0664 }
+        ],
+        NV: [], // No state income tax
+        NH: [], // Only taxes interest and dividends
+        NJ: [
+            { bracket: 20000, rate: 0.014 },
+            { bracket: 35000, rate: 0.0175 },
+            { bracket: 40000, rate: 0.035 },
+            { bracket: 75000, rate: 0.05525 },
+            { bracket: 500000, rate: 0.0637 },
+            { bracket: 1000000, rate: 0.0897 },
+            { bracket: Infinity, rate: 0.1075 }
+        ],
+        NM: [
+            { bracket: 5500, rate: 0.017 },
+            { bracket: 11000, rate: 0.032 },
+            { bracket: 16000, rate: 0.047 },
+            { bracket: 210000, rate: 0.049 },
+            { bracket: Infinity, rate: 0.059 }
+        ],
+        NY: [
+            { bracket: 8500, rate: 0.04 },
+            { bracket: 11700, rate: 0.045 },
+            { bracket: 13900, rate: 0.0525 },
+            { bracket: 21400, rate: 0.059 },
+            { bracket: 80650, rate: 0.0597 },
+            { bracket: 215400, rate: 0.0633 },
+            { bracket: 1077550, rate: 0.0685 },
+            { bracket: Infinity, rate: 0.0882 }
+        ],
+        NC: [{ bracket: Infinity, rate: 0.0475 }], // Flat 4.75%
+        ND: [
+            { bracket: 41775, rate: 0.011 },
+            { bracket: 101050, rate: 0.0204 },
+            { bracket: 210825, rate: 0.0227 },
+            { bracket: 458350, rate: 0.0264 },
+            { bracket: Infinity, rate: 0.029 }
+        ],
+        OH: [
+            { bracket: 26050, rate: 0.0285 },
+            { bracket: 46100, rate: 0.0333 },
+            { bracket: 92150, rate: 0.038 },
+            { bracket: 115300, rate: 0.0427 },
+            { bracket: Infinity, rate: 0.0485 }
+        ],
+        OK: [
+            { bracket: 1000, rate: 0.0025 },
+            { bracket: 2500, rate: 0.0075 },
+            { bracket: 3750, rate: 0.0175 },
+            { bracket: 4900, rate: 0.0275 },
+            { bracket: 7200, rate: 0.0375 },
+            { bracket: Infinity, rate: 0.0475 }
+        ],
+        OR: [
+            { bracket: 3750, rate: 0.0475 },
+            { bracket: 9450, rate: 0.0675 },
+            { bracket: 125000, rate: 0.0875 },
+            { bracket: Infinity, rate: 0.099 }
+        ],
+        PA: [{ bracket: Infinity, rate: 0.0307 }], // Flat 3.07%
+        RI: [
+            { bracket: 68200, rate: 0.0375 },
+            { bracket: 155050, rate: 0.0475 },
+            { bracket: Infinity, rate: 0.0599 }
+        ],
+        SC: [
+            { bracket: 3200, rate: 0.03 },
+            { bracket: 6410, rate: 0.04 },
+            { bracket: 9620, rate: 0.05 },
+            { bracket: 12820, rate: 0.06 },
+            { bracket: Infinity, rate: 0.07 }
+        ],
+        SD: [], // No state income tax
+        TN: [], // No state income tax
+        TX: [], // No state income tax
+        UT: [{ bracket: Infinity, rate: 0.0485 }], // Flat 4.85%
+        VT: [
+            { bracket: 42150, rate: 0.0335 },
+            { bracket: 102200, rate: 0.066 },
+            { bracket: 213150, rate: 0.076 },
+            { bracket: Infinity, rate: 0.0875 }
+        ],
+        VA: [
+            { bracket: 3000, rate: 0.02 },
+            { bracket: 5000, rate: 0.03 },
+            { bracket: 17000, rate: 0.05 },
+            { bracket: Infinity, rate: 0.0575 }
+        ],
+        WA: [], // No state income tax
+        WV: [
+            { bracket: 10000, rate: 0.03 },
+            { bracket: 25000, rate: 0.04 },
+            { bracket: 40000, rate: 0.045 },
+            { bracket: 60000, rate: 0.06 },
+            { bracket: Infinity, rate: 0.065 }
+        ],
+        WI: [
+            { bracket: 13810, rate: 0.0354 },
+            { bracket: 27630, rate: 0.0465 },
+            { bracket: 304170, rate: 0.0530 },
+            { bracket: Infinity, rate: 0.0765 }
+        ],
+        WY: [] // No state income tax
+    },
     STANDARD_DEDUCTION: 14600, // 2024 single filer
     QBI_DEDUCTION: 0.20, // 20% of qualified business income
     MEALS_DEDUCTION: 0.50 // 50% of meal expenses are deductible
+};
+
+const STATE_FEES = {
+    AL: 200,  // Annual LLC fee
+    AK: 100,  // Biennial report fee
+    AZ: 50,   // Annual report fee
+    AR: 150,  // Annual franchise tax
+    CA: 800,  // Annual LLC fee
+    CO: 50,   // Annual report fee
+    CT: 250,  // Annual report fee
+    DE: 300,  // Annual franchise tax
+    FL: 150,  // Annual report fee
+    GA: 50,   // Annual registration fee
+    HI: 15,   // Annual report fee
+    ID: 20,   // Annual report fee
+    IL: 75,   // Annual report fee
+    IN: 50,   // Business entity report fee
+    IA: 60,   // Biennial report fee
+    KS: 55,   // Annual report fee
+    KY: 15,   // Annual report fee
+    LA: 35,   // Annual report fee
+    ME: 85,   // Annual report fee
+    MD: 300,  // Annual report fee
+    MA: 500,  // Annual report fee
+    MI: 25,   // Annual report fee
+    MN: 135,  // Annual renewal fee
+    MS: 25,   // Annual report fee
+    MO: 45,   // Annual registration fee
+    MT: 20,   // Annual report fee
+    NE: 10,   // Biennial report fee
+    NV: 350,  // Annual list fee
+    NH: 100,  // Annual report fee
+    NJ: 75,   // Annual report fee
+    NM: 50,   // Annual report fee
+    NY: 250,  // Annual filing fee
+    NC: 200,  // Annual report fee
+    ND: 50,   // Annual report fee
+    OH: 99,   // Annual report fee
+    OK: 25,   // Annual report fee
+    OR: 100,  // Annual report fee
+    PA: 70,   // Decennial report fee
+    RI: 50,   // Annual report fee
+    SC: 110,  // Annual report fee
+    SD: 50,   // Annual report fee
+    TN: 300,  // Annual report fee
+    TX: 300,  // Annual franchise tax minimum
+    UT: 20,   // Annual renewal fee
+    VT: 35,   // Annual report fee
+    VA: 50,   // Annual registration fee
+    WA: 200,  // Annual report fee
+    WV: 25,   // Annual report fee
+    WI: 25,   // Annual report fee
+    WY: 60    // Annual report fee
 };
 
 // Utility functions
@@ -26,6 +312,26 @@ function formatMoney(amount) {
         style: 'currency',
         currency: 'USD'
     }).format(amount);
+}
+
+function calculateStateTax(taxableIncome, state) {
+    if (!TAX_RATES.STATE[state] || TAX_RATES.STATE[state].length === 0) {
+        return 0; // No state income tax
+    }
+
+    let tax = 0;
+    let previousBracket = 0;
+
+    for (const bracket of TAX_RATES.STATE[state]) {
+        if (taxableIncome > previousBracket) {
+            const taxableAmount = Math.min(taxableIncome - previousBracket, bracket.bracket - previousBracket);
+            tax += taxableAmount * bracket.rate;
+        }
+        if (taxableIncome <= bracket.bracket) break;
+        previousBracket = bracket.bracket;
+    }
+
+    return tax;
 }
 
 function calculateFederalTax(taxableIncome) {
@@ -53,17 +359,19 @@ function calculateFICA(salary, isEmployer = false) {
 }
 
 // Main calculation functions
-function calculateW2(baseWages) {
+function calculateW2(baseWages, state) {
     const ficaTax = calculateFICA(baseWages);
-    const taxableIncome = Math.max(baseWages - TAX_RATES.STANDARD_DEDUCTION, 0); // Standard deduction and half of FICA
-    const federalTax = calculateFederalTax(taxableIncome);
+    const federalTaxableIncome = Math.max(baseWages - TAX_RATES.STANDARD_DEDUCTION - (ficaTax / 2), 0);
+    const federalTax = calculateFederalTax(federalTaxableIncome);
+    const stateTax = calculateStateTax(Math.max(baseWages - TAX_RATES.STANDARD_DEDUCTION, 0), state);
 
     return {
         grossIncome: baseWages,
         standardDeduction: TAX_RATES.STANDARD_DEDUCTION,
         ficaTax,
         federalTax,
-        netIncome: baseWages - ficaTax - federalTax
+        stateTax,
+        netIncome: baseWages - ficaTax - federalTax - stateTax
     };
 }
 
@@ -74,7 +382,9 @@ function calculateSCorp(params) {
         salaryRatio,
         rdPercentage,
         healthInsurance,
-        deductions
+        deductions,
+        state,
+        stateFees
     } = params;
 
     // Calculate gross income with contractor premium
@@ -91,6 +401,10 @@ function calculateSCorp(params) {
         }
         return sum + val;
     }, 0);
+
+    // Add state fees to deductions
+    const totalDeductionsWithFees = totalDeductions + stateFees;
+    
     const rdCredit = salaryAmount * (rdPercentage / 100) * 0.065; // 6.5% R&D credit
     
     // Calculate FICA on salary portion
@@ -98,33 +412,42 @@ function calculateSCorp(params) {
     const employerFica = calculateFICA(salaryAmount, true);
     
     // Calculate QBI deduction after business deductions
-    const qbiDeduction = (dividendAmount - employerFica - totalDeductions) * TAX_RATES.QBI_DEDUCTION;
+    const qbiDeduction = (dividendAmount - employerFica - totalDeductionsWithFees) * TAX_RATES.QBI_DEDUCTION;
     
-    // Calculate taxable income with standard deduction
-    const taxableIncome = Math.max((salaryAmount + dividendAmount) - 
+    // Calculate federal taxable income
+    const federalTaxableIncome = Math.max((salaryAmount + dividendAmount) - 
                          TAX_RATES.STANDARD_DEDUCTION -
-                         (totalDeductions + employerFica + healthInsurance + qbiDeduction), 0);
+                         (totalDeductionsWithFees + employerFica + healthInsurance + qbiDeduction), 0);
     
-    // Calculate federal tax
-    const federalTax = calculateFederalTax(taxableIncome) - rdCredit;
+    // Calculate state taxable income (some states may handle deductions differently)
+    const stateTaxableIncome = Math.max((salaryAmount + dividendAmount) - 
+                         TAX_RATES.STANDARD_DEDUCTION -
+                         (totalDeductionsWithFees + employerFica + healthInsurance), 0);
     
-    // Calculate net income (business deductions are reimbursed)
+    // Calculate taxes
+    const federalTax = calculateFederalTax(federalTaxableIncome) - rdCredit;
+    const stateTax = calculateStateTax(stateTaxableIncome, state);
+    
+    // Calculate net income (business deductions and fees are reimbursed)
     const netIncome = grossIncome - 
                      ficaTax - 
                      federalTax - 
-                     healthInsurance;
+                     stateTax - 
+                     healthInsurance -
+                     stateFees;
 
     return {
         grossIncome,
         salaryAmount,
         dividendAmount,
-        deductions: totalDeductions,
+        deductions: totalDeductionsWithFees,
         ficaTax,
         employerFica,
         healthInsurance,
         qbiDeduction,
         rdCredit,
         federalTax,
+        stateTax,
         netIncome
     };
 }
@@ -148,6 +471,10 @@ function updateW2Results(results) {
         <div class="result-row">
             <span class="result-label">Federal Tax:</span>
             <span class="result-value">-${formatMoney(results.federalTax)}</span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">State Tax:</span>
+            <span class="result-value">-${formatMoney(results.stateTax)}</span>
         </div>
         <div class="result-row result-total">
             <span class="result-label">Net Income:</span>
@@ -203,6 +530,10 @@ function updateSCorpResults(results) {
             <span class="result-label">Federal Tax:</span>
             <span class="result-value">-${formatMoney(results.federalTax)}</span>
         </div>
+        <div class="result-row">
+            <span class="result-label">State Tax:</span>
+            <span class="result-value">-${formatMoney(results.stateTax)}</span>
+        </div>
         <div class="result-row result-total">
             <span class="result-label">Net Income:</span>
             <span class="result-value">${formatMoney(results.netIncome)}</span>
@@ -226,6 +557,7 @@ function updateNetDifference(w2Results, sCorpResults) {
 function initializeEventListeners() {
     const inputs = [
         'baseWages',
+        'state',
         'contractorPremium',
         'salaryRatio',
         'rdPercentage',
@@ -235,7 +567,8 @@ function initializeEventListeners() {
         'deductionHomeOffice',
         'deductionMeals',
         'deductionPhone',
-        'deductionAugusta'
+        'deductionAugusta',
+        'stateFees'
     ];
 
     inputs.forEach(id => {
@@ -250,15 +583,28 @@ function initializeEventListeners() {
         }
     });
 
+    // Set initial state fees based on default state
+    const stateSelect = document.getElementById('state');
+    const stateFeesInput = document.getElementById('stateFees');
+    stateFeesInput.value = STATE_FEES[stateSelect.value];
+
+    // Update state fees when state changes
+    stateSelect.addEventListener('change', () => {
+        stateFeesInput.value = STATE_FEES[stateSelect.value];
+        updateCalculations();
+    });
+
     updateCalculations();
 }
 
 function updateCalculations() {
     const baseWages = parseFloat(document.getElementById('baseWages').value) || 0;
+    const state = document.getElementById('state').value;
     const contractorPremium = parseFloat(document.getElementById('contractorPremium').value) || 0;
     const salaryRatio = parseFloat(document.getElementById('salaryRatio').value) || 0;
     const rdPercentage = parseFloat(document.getElementById('rdPercentage').value) || 0;
     const healthInsurance = parseFloat(document.getElementById('healthInsurance').value) || 0;
+    const stateFees = parseFloat(document.getElementById('stateFees').value) || 0;
 
     const deductions = {
         travel: parseFloat(document.getElementById('deductionTravel').value) || 0,
@@ -269,14 +615,16 @@ function updateCalculations() {
         augusta: parseFloat(document.getElementById('deductionAugusta').value) || 0
     };
 
-    const w2Results = calculateW2(baseWages);
+    const w2Results = calculateW2(baseWages, state);
     const sCorpResults = calculateSCorp({
         baseWages,
         contractorPremium,
         salaryRatio,
         rdPercentage,
         healthInsurance,
-        deductions
+        deductions,
+        state,
+        stateFees
     });
 
     updateW2Results(w2Results);
